@@ -18,7 +18,8 @@ router.post("/register", async (req, res) => {
       throw Error("Password should be at least 8 characters long");
     } else {
       const newUser = await register(req, res);
-      res.status(200).json(newUser);
+      const { password: hashedPassword, ...user } = newUser._doc;
+      res.status(200).json(user);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

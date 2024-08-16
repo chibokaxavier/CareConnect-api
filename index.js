@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRoute from "./Routes/authRouter.js";
 import userRoute from "./Routes/userRouter.js";
+import doctorRoute from "./Routes/doctorRouter.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(cors(corsOption));
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/doctors", doctorRoute);
 
 app.listen(port, () => {
   connectDb();

@@ -36,7 +36,7 @@ export const register = async (req, res) => {
         role,
       });
     }
-    if (user === "doctor") {
+    if (role === "doctor") {
       user = new Doctor({
         name,
         email,
@@ -47,7 +47,8 @@ export const register = async (req, res) => {
       });
     }
 
-    return await user.save();
+    const newUser = await user.save();
+    return newUser;
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
     console.log(error);
@@ -77,7 +78,7 @@ export const login = async (req, res) => {
       req.body.password,
       user.password
     );
-    if (!isHashedPassword) { 
+    if (!isHashedPassword) {
       return res
         .status(400)
         .json({ status: false, message: "Invalid credentials" });
