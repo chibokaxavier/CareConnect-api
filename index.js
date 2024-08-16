@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRoute from "./Routes/authRouter.js";
+import userRoute from "./Routes/userRouter.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOption));
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoute);
 
 app.listen(port, () => {
   connectDb();

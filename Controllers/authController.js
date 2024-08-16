@@ -77,10 +77,10 @@ export const login = async (req, res) => {
       req.body.password,
       user.password
     );
-    if (!isHashedPassword) {
+    if (!isHashedPassword) { 
       return res
         .status(400)
-        .json({ status: false, message: "invcalid credentials" });
+        .json({ status: false, message: "Invalid credentials" });
     }
 
     // get token
