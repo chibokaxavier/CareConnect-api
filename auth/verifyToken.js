@@ -6,12 +6,46 @@ export const authenticate = async (req, res, next) => {
   // get token from headers
   const authToken = req.headers.authorization;
   //   check if token exists
-  if (!authToken || !authToken.startswith("Bearer ")) {
+  if (!authToken || !authToken.startsWith("Bearer ")) {
     return res
       .status(401)
       .json({ success: false, message: "No token,authorization denied" });
   }
   try {
-    console.log(authToken);
-  } catch (error) {}
+    const token = authToken.split(" ")[1];
+    // verify Token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (!decoded.id) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+    req.userId = decoded.id;
+    req.role = decoded.role;
+    next();
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({ message: "Token expired" });
+    }
+    return res
+      .status(401)
+      .json({ message: "Invalid token", error: error.message });
+  }
+};
+
+export const restrict = (roles) => async (req, res, next) => {
+  const userId = req.userId;
+  let user;
+  const patient = await User.findById(userId);
+  const doctor = await Doctor.findById(userId);
+  if (patient) {
+    user = patient;
+  }
+  if (doctor) {
+    user = doctor;
+  }
+  if (!roles.includes(user.role)) {
+    return res
+      .status(404)
+      .json({ success: false, message: "You're not autorized" });
+  }
+  next();
 };

@@ -32,7 +32,6 @@ router.post("/login", async (req, res) => {
     email = email.trim();
     password = password.trim();
     const authenticatedUser = await login(req, res);
-    res.status(200).json(authenticatedUser);
   } catch (error) {
     res.status(400).send(error.message);
   }
