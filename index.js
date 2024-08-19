@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import authRoute from "./Routes/authRouter.js";
 import userRoute from "./Routes/userRouter.js";
 import doctorRoute from "./Routes/doctorRouter.js";
+import reviewRoute from "./Routes/reviewRouter.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use(cors(corsOption));
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/doctors", doctorRoute);
+app.use("/api/v1/reviews", reviewRoute);
 
 app.listen(port, () => {
   connectDb();

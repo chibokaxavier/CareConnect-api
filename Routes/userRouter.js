@@ -12,5 +12,5 @@ const router = express.Router();
 router.put("/:id", authenticate, restrict(["patient"]), updateUser);
 router.get("/", authenticate, restrict(["admin"]), getAllUsers);
 router.get("/:id", authenticate, restrict(["patient"]), getSingleUser);
-router.get("/:id", authenticate, restrict(["patient"]), deleteUser);
+router.delete("/:id", authenticate, restrict(["patient"]), deleteUser);
 export default router;
