@@ -13,15 +13,12 @@ const generateToken = (user) => {
 export const register = async (req, res) => {
   const { email, password, name, role, photo, gender } = req.body;
   try {
-    let user = null;
-    if (role === "patient") {
-      user = await User.findOne({ email });
-    } else if (role === "doctor") {
-      user = await Doctor.findOne({ email });
-    }
-    // check if the user exists
-    if (user) {
-      throw new Error("User already exists");
+    let user = await User.findOne({ email });
+    let doctor = await Doctor.findOne({ email });
+
+    // If the email exists in either collection, throw an error
+    if (user || doctor) {
+      throw new Error("User already exists with this email");
     }
     // hash password
     const salt = await bcrypt.genSalt(10);
@@ -35,8 +32,7 @@ export const register = async (req, res) => {
         gender,
         role,
       });
-    }
-    if (role === "doctor") {
+    } else if (role === "doctor") {
       user = new Doctor({
         name,
         email,
@@ -51,7 +47,6 @@ export const register = async (req, res) => {
     return newUser;
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
-    console.log(error);
   }
 };
 
@@ -92,6 +87,11 @@ export const login = async (req, res) => {
       role,
     });
   } catch (error) {
-    console.log(error);
+    res.status(200).json({
+      status: true,
+      message: "Failed to logged in",
+      error: error.message,
+    });
+    // console.log(error);
   }
 };

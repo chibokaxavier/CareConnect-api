@@ -100,10 +100,15 @@ export const getMyAppointments = async (req, res) => {
     const bookings = await Booking.find({ user: req.userId });
     // step 2 extract doctor ids from appointments gotten in step 1
     const doctorIds = bookings.map((el) => el.doctor.id);
-    // step 3 retrive doctors using the ids gotten
+    // step 3 retrieve doctors using the ids gotten
     const doctors = await Doctor.find({ _id: { $in: doctorIds } }).select(
       "-password"
     );
+    res.status(200).json({
+      success: true,
+      message: "Appointments successfully fetched",
+      data: doctors,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
