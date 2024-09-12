@@ -46,7 +46,7 @@ export const register = async (req, res) => {
     const newUser = await user.save();
     return newUser;
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    throw error;
   }
 };
 
@@ -65,7 +65,9 @@ export const login = async (req, res) => {
     }
     // check if user does not exists
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     // compare password
@@ -79,7 +81,7 @@ export const login = async (req, res) => {
     // get token
     const token = generateToken(user);
     const { password: hashedPassword, role, appointments, ...rest } = user._doc;
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
       message: "Successfully logged in",
       token,
@@ -87,8 +89,8 @@ export const login = async (req, res) => {
       role,
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    return res.status(200).json({
+      status: false,
       message: "Failed to logged in",
       error: error.message,
     });

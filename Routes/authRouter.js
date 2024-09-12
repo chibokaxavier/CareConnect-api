@@ -8,25 +8,59 @@ router.post("/register", async (req, res) => {
     name = name.trim();
     email = email.trim();
     password = password.trim();
+
+    // Input validation
     if (!(name && email && password)) {
-      throw Error("Empty input fields!");
+      return res.status(400).json({ message: "Empty input fields!" });
     } else if (!/^[a-zA-Z]*$/.test(name)) {
-      throw Error("Invalid name entered!");
+      return res.status(400).json({ message: "Invalid name entered!" });
     } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      throw Error("Invalid email entered!");
+      return res.status(400).json({ message: "Invalid email entered!" });
     } else if (password.length < 8) {
-      throw Error("Password should be at least 8 characters long");
-    } else {
-      const newUser = await register(req, res);
+      return res
+        .status(400)
+        .json({ message: "Password should be at least 8 characters long" });
+    }
+
+    // Proceed with registration
+    const newUser = await register(req, res);
+
+    // Check if the user was successfully created by the `register` function
+    if (newUser) {
       const { password: hashedPassword, ...user } = newUser._doc;
-      res
+      return res
         .status(200)
         .json({ message: "User created successfully", data: user });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 });
+// router.post("/register", async (req, res) => {
+//   try {
+//     let { email, password, name, role, photo, gender } = req.body;
+//     name = name.trim();
+//     email = email.trim();
+//     password = password.trim();
+//     if (!(name && email && password)) {
+//       throw Error("Empty input fields!");
+//     } else if (!/^[a-zA-Z]*$/.test(name)) {
+//       throw Error("Invalid name entered!");
+//     } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+//       throw Error("Invalid email entered!");
+//     } else if (password.length < 8) {
+//       throw Error("Password should be at least 8 characters long");
+//     } else {
+//       const newUser = await register(req, res);
+//       const { password: hashedPassword, ...user } = newUser._doc;
+//       res
+//         .status(200)
+//         .json({ message: "User created successfully", data: user });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 
 router.post("/login", async (req, res) => {
   try {

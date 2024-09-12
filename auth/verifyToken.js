@@ -9,7 +9,7 @@ export const authenticate = async (req, res, next) => {
   if (!authToken || !authToken.startsWith("Bearer ")) {
     return res
       .status(401)
-      .json({ success: false, message: "No token,authorization denied" });
+      .json({ success: false, message: "No token, authorization denied" });
   }
   try {
     const token = authToken.split(" ")[1];
@@ -45,7 +45,7 @@ export const restrict = (roles) => async (req, res, next) => {
   if (!roles.includes(user.role)) {
     return res
       .status(404)
-      .json({ success: false, message: "You're not autorized" });
+      .json({ success: false, message: "You're not authorized" });
   }
   next();
 };
