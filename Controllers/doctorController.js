@@ -6,6 +6,19 @@ export const updateDoctor = async (req, res) => {
   const id = req.params.id;
 
   try {
+    if (req.body.name) {
+      // Regex to check if name has two words, each with at least 4 characters, separated by a single space
+      const nameRegex = /^[a-zA-Z]{4,}\s[a-zA-Z]{4,}$/;
+
+      if (!nameRegex.test(req.body.name.trim())) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Name must contain a first and last name, each more than 4 characters, with only one space between them!",
+        });
+      }
+    }
+
     // Check if the password field is in the request body
     if (req.body.password) {
       // Hash the password before updating the doctor
