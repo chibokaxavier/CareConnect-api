@@ -13,8 +13,8 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const corsOption = {
-  origin: "http://localhost:3000",
-  credentials: true,
+  origin: "https://care-connect-tan.vercel.app",
+  credentials: true, 
 };
 
 const connectDb = async () => {
