@@ -12,11 +12,22 @@ router.post("/register", async (req, res) => {
     // Input validation
     if (!(name && email && password)) {
       return res.status(400).json({ message: "Empty input fields!" });
-    } else if (!/^[a-zA-Z]*$/.test(name)) {
-      return res.status(400).json({ message: "Invalid name entered!" });
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    }
+    // Validate full name (First and Last name with one space, both more than 4 characters)
+    else if (!/^[a-zA-Z]{4,}\s[a-zA-Z]{4,}$/.test(name)) {
+      return res
+        .status(400)
+        .json({
+          message:
+            "Name must contain a first and last name, each more than 4 characters, with only one space between them!",
+        });
+    }
+    // Validate email
+    else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       return res.status(400).json({ message: "Invalid email entered!" });
-    } else if (password.length < 8) {
+    }
+    // Validate password length
+    else if (password.length < 8) {
       return res
         .status(400)
         .json({ message: "Password should be at least 8 characters long" });
