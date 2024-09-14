@@ -1,24 +1,39 @@
 import User from "../models/UserSchema.js";
 import Booking from "../models/BookingSchema.js";
 import Doctor from "../models/DoctorSchema.js";
+import bcrypt from 'bcrypt';
+
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
+
   try {
+    // Check if the password field is in the request body
+    if (req.body.password) {
+      // Hash the password before updating the user
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
+      // Replace the plain password with the hashed password in the request body
+      req.body.password = hashedPassword;
+    }
+
+    // Proceed with updating the user
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { $set: req.body },
       { new: true }
     );
+
     res.status(200).json({
       success: true,
-      message: "Successfully updated",
+      message: 'Successfully updated',
       data: updatedUser,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to update",
+      message: 'Failed to update',
     });
   }
 };
