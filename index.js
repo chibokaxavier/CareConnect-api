@@ -13,8 +13,11 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const corsOption = {
-  origin: "https://care-connect-tan.vercel.app",
-  credentials: true, 
+  origin: [
+    "https://care-connect-tan.vercel.app",
+    "http://localhost:3000/", // or your specific localhost port
+  ],
+  credentials: true,
 };
 
 const connectDb = async () => {
@@ -25,7 +28,7 @@ const connectDb = async () => {
     console.log("mongoose connection to the database failed");
   }
 };
-// middleware 
+// middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOption));
