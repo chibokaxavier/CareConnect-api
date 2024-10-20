@@ -17,8 +17,8 @@ const corsOption = {
     "https://care-connect-tan.vercel.app",
     "http://localhost:3000/", // or your specific localhost port
   ],
-  credentials: true,
-};
+  credentials: true, 
+};  
 
 const connectDb = async () => {
   try {

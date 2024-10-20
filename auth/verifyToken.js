@@ -27,7 +27,7 @@ export const authenticate = async (req, res, next) => {
     }
     return res
       .status(401)
-      .json({ message: "Invalid token", error: error.message });
+      .json({ message: "Invalid token, please ensure you are logged in ", error: error.message });
   }
 };
 
